@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { debounce, throttle } from 'lodash-es';
 
-export default class VirtualList extends React.PureComponent {
+export default class VirtualizedList extends React.PureComponent {
     static propTypes = {
         children: PropTypes.any,
         disabled: PropTypes.bool,
@@ -110,22 +110,7 @@ export default class VirtualList extends React.PureComponent {
 
         console.warn(`virtualContainer scrollTop=${scrollTop} slice=${firstItemIndex}-${firstItemIndex + viewCount} showing=${view.length}/${items.length}`);
 
-        if(!buffer) {
-            this.setState({ firstItemIndex, viewCount, spaceBefore, spaceAfter });
-        }
-        else {
-            console.log('ao!', firstItemIndex, buffer/2)
-            const bufferBeforeIndex = firstItemIndex > (buffer/2) ? (firstItemIndex - buffer/2) : 0;
-            const bufferedItemsBefore = items.slice(bufferBeforeIndex, firstItemIndex);
-
-            const bufferAfterIndex = firstItemIndex + viewCount;
-            const bufferedItemsAfter = items.slice(bufferAfterIndex, bufferAfterIndex + buffer/2);
-
-            //add spaceBefore and spaceAfter with buffered items before or after: be careful to check whether buffer fits before/after
-
-            console.log('buffer', bufferBeforeIndex, bufferedItemsBefore, '-', bufferAfterIndex, bufferedItemsAfter);
-            this.setState({ firstItemIndex, viewCount: viewCount + buffer/2, spaceBefore, spaceAfter });
-        }
+        //https://github.com/developerdizzle/react-virtual-list/blob/master/src/utils/getVisibleItemBounds.js
 
         this.lastScrollTop = scrollTop;
     };

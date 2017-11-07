@@ -1,1 +1,1 @@
-# react-virtual-list
+# react-virtualized-list
